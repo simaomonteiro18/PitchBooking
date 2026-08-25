@@ -1,14 +1,25 @@
 package com.simaomonteiro18.pitchbooking.entities;
 
 import com.simaomonteiro18.pitchbooking.entities.enums.InvitationStatus;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "invitations")
 public class Invitation {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private User user;
+
+    @ManyToOne
     private Reservation reservation;
+
+    @Enumerated(EnumType.STRING)
     private InvitationStatus status = InvitationStatus.PENDING;
 
     public Invitation() {

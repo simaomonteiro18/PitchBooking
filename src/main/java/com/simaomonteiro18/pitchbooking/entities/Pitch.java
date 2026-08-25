@@ -1,15 +1,22 @@
 package com.simaomonteiro18.pitchbooking.entities;
 
 import com.simaomonteiro18.pitchbooking.entities.enums.PitchType;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "pitches")
 public class Pitch {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String city;
     private double pricePerHour;
+
+    @Enumerated(EnumType.STRING)
     private PitchType pitchType;
 
     public Pitch() {

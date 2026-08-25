@@ -1,6 +1,7 @@
 package com.simaomonteiro18.pitchbooking.entities;
 
 import com.simaomonteiro18.pitchbooking.entities.enums.InvitationStatus;
+import jakarta.persistence.*;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -9,15 +10,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "reservations")
 public class Reservation {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne
     private User organizer;
+
+    @ManyToOne
     private Pitch pitch;
+
+
     private Instant moment;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
+
+    @OneToMany(mappedBy = "reservation")
     private List<Invitation> inviteList = new ArrayList<>();
 
     public Reservation() {
