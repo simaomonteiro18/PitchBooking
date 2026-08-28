@@ -9,6 +9,7 @@ import com.simaomonteiro18.pitchbooking.repositories.InvitationRepository;
 import com.simaomonteiro18.pitchbooking.repositories.PitchRepository;
 import com.simaomonteiro18.pitchbooking.repositories.ReservationRepository;
 import com.simaomonteiro18.pitchbooking.repositories.UserRepository;
+import com.simaomonteiro18.pitchbooking.services.InvitationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -32,9 +33,6 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ReservationRepository reservationRepository;
-
-    @Autowired
-    private ReservationService reservationService;
 
     @Autowired
     private InvitationRepository invitationRepository;

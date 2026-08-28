@@ -17,6 +17,7 @@ public class Invitation {
     private User user;
 
     @ManyToOne
+    @JoinColumn(name = "reservation_id")
     private Reservation reservation;
 
     @Enumerated(EnumType.STRING)
