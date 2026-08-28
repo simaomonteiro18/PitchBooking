@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import com.simaomonteiro18.pitchbooking.services.ReservationService;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -31,6 +32,9 @@ public class TestConfig implements CommandLineRunner {
 
     @Autowired
     private ReservationRepository reservationRepository;
+
+    @Autowired
+    private ReservationService reservationService;
 
     @Autowired
     private InvitationRepository invitationRepository;

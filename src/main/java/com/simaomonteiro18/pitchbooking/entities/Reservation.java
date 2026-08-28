@@ -19,7 +19,7 @@ public class Reservation {
     private Long id;
 
     @ManyToOne
-    private User organizer;
+    private User user;
 
     @ManyToOne
     private Pitch pitch;
@@ -36,8 +36,8 @@ public class Reservation {
     public Reservation() {
     }
 
-    public Reservation(User organizer, Pitch pitch, Instant moment, LocalDateTime startTime, LocalDateTime endTime) {
-        this.organizer = organizer;
+    public Reservation(User user, Pitch pitch, Instant moment, LocalDateTime startTime, LocalDateTime endTime) {
+        this.user = user;
         this.pitch = pitch;
         this.moment = moment;
         this.startTime = startTime;
@@ -52,12 +52,12 @@ public class Reservation {
         this.id = id;
     }
 
-    public User getOrganizer() {
-        return organizer;
+    public User getUser() {
+        return user;
     }
 
-    public void setOrganizer(User organizer) {
-        this.organizer = organizer;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Pitch getPitch() {
