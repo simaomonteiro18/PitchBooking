@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    List<Reservation> findByUser(User user);
+    List<Reservation> findByOrganizer(User organizer);
 
     @Query("""
     SELECT COUNT(r) > 0

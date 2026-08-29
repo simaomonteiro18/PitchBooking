@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReservationService {
@@ -29,7 +30,7 @@ public class ReservationService {
     @Autowired
     private PitchRepository pitchRepository;
 
-    public Reservation createReservation(Long userId, Long pitchId, Instant moment, LocalDateTime startTime, LocalDateTime endTime) {
+    public Reservation createReservation(Long userId, Long pitchId, LocalDateTime startTime, LocalDateTime endTime) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
@@ -37,10 +38,12 @@ public class ReservationService {
         Pitch pitch = pitchRepository.findById(pitchId)
                 .orElseThrow(() -> new ResourceNotFoundException(Pitch.class, pitchId));
 
+        if (startTime.isAfter(endTime)) {
+            throw new InvalidTimeException("Hora de início é posterior à de final! Verifique os campos.");
+        }
+
         Duration duration = Duration.between(startTime, endTime);
         long minutes = duration.toMinutes();
-
-        System.out.println("MINUTES = " + minutes);
 
         if (minutes < 60L) {
             throw new InvalidTimeException("Tempo inferior a 1 hora!");
@@ -50,20 +53,23 @@ public class ReservationService {
 
         boolean exists = reservationRepository.existsOverlappingReservation(pitch, startTime, endTime);
 
-        System.out.println("EXISTS = " + exists);
-
         if (exists) {
             throw new ReservationConflictException("Já existe uma reserva nesse horário.");
         }
 
-        Reservation reservation = new Reservation(user, pitch, moment, startTime, endTime);
+        Reservation reservation = new Reservation(user, pitch, Instant.now(), startTime, endTime);
 
         return reservationRepository.save(reservation);
 
     }
 
-    public List<Reservation> findByUser(User user) {
-        return reservationRepository.findByUser(user);
+    public List<Reservation> findReservationsByUser(Long userId) {
+
+        User user = userRepository.findById(userId)
+                        .orElseThrow(() -> new ResourceNotFoundException(User.class, userId));
+
+        return reservationRepository.findByOrganizer(user);
+
     }
 
 }

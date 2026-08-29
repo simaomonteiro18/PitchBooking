@@ -14,7 +14,7 @@ public class Invitation {
     private Long id;
 
     @ManyToOne
-    private User user;
+    private User guest;
 
     @ManyToOne
     @JoinColumn(name = "reservation_id")
@@ -26,8 +26,8 @@ public class Invitation {
     public Invitation() {
     }
 
-    public Invitation(User user, Reservation reservation) {
-        this.user = user;
+    public Invitation(User guest, Reservation reservation) {
+        this.guest = guest;
         this.reservation = reservation;
     }
 
@@ -39,12 +39,12 @@ public class Invitation {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
+    public User getGuest() {
+        return guest;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setGuest(User guest) {
+        this.guest = guest;
     }
 
     public Reservation getReservation() {
