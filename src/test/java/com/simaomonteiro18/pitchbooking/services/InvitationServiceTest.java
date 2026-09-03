@@ -6,6 +6,8 @@ import com.simaomonteiro18.pitchbooking.entities.Reservation;
 import com.simaomonteiro18.pitchbooking.entities.User;
 import com.simaomonteiro18.pitchbooking.entities.enums.InvitationStatus;
 import com.simaomonteiro18.pitchbooking.entities.enums.PitchType;
+import com.simaomonteiro18.pitchbooking.exceptions.InvalidGuestException;
+import com.simaomonteiro18.pitchbooking.exceptions.InvitationConflictException;
 import com.simaomonteiro18.pitchbooking.repositories.InvitationRepository;
 import com.simaomonteiro18.pitchbooking.repositories.ReservationRepository;
 import com.simaomonteiro18.pitchbooking.repositories.UserRepository;
@@ -20,10 +22,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class InvitationServiceTest {
@@ -74,6 +75,53 @@ public class InvitationServiceTest {
         assertNotNull(invitationFinal);
 
         assertEquals(guest, invitationFinal.getGuest());
+
+    }
+
+    @Test
+    @DisplayName("Teste de Convite Duplicado")
+    void inviteAlreadyExists() {
+
+        User organizer = new User("Simao", "sm18@gmail.com", "912345678", "Sintra");
+
+        User guest = new User("Lopes", "lopes@gmail.com", "987654321", "Queluz");
+
+        organizer.setId(1L);
+        guest.setId(2L);
+
+        Pitch pitch = new Pitch("Jamor", "Oeiras", 30.0, PitchType.ELEVEN);
+
+        Reservation reservation = new Reservation(organizer, pitch, Instant.now(), LocalDateTime.parse("2026-09-04T20:00:00"), LocalDateTime.parse("2026-09-04T21:00:00"));
+
+        when(userRepository.findById(2L)).thenReturn(Optional.of(guest));
+
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(reservation));
+
+        when(invitationRepository.existsByGuestAndReservation(guest, reservation)).thenReturn(true);
+
+        assertThrows(InvitationConflictException.class, () -> {invitationService.createInvitation(2L, 1L);});
+
+    }
+
+    @Test
+    @DisplayName("Teste de Auto-Convite")
+    void autoInviteDetector() {
+
+        User user = new User("Sara", "sara@gmail.com", "943754623", "Setúbal");
+
+        user.setId(1L);
+
+        Pitch pitch = new Pitch("Bonfim", "Setúbal", 15.0, PitchType.ELEVEN);
+
+        Reservation reservation = new Reservation(user, pitch, Instant.now(), LocalDateTime.parse("2026-09-04T20:00:00"), LocalDateTime.parse("2026-09-04T21:00:00"));
+
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+
+        when(reservationRepository.findById(1L)).thenReturn(Optional.of(reservation));
+
+        when(invitationRepository.existsByGuestAndReservation(user, reservation)).thenReturn(false);
+
+        assertThrows(InvalidGuestException.class, () -> {invitationService.createInvitation(1L, 1L);});
 
     }
 
