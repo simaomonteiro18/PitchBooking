@@ -1,0 +1,16 @@
+package com.simaomonteiro18.pitchbooking.mappers;
+
+import com.simaomonteiro18.pitchbooking.dtos.InvitationDTO;
+import com.simaomonteiro18.pitchbooking.entities.Invitation;
+
+public class InvitationMapper {
+
+    public static InvitationDTO toDTO(Invitation invitation) {
+
+        InvitationDTO invitationDTO = new InvitationDTO(invitation.getId(), invitation.getGuest().getName(), invitation.getReservation().getId(), invitation.getStatus());
+
+        return invitationDTO;
+
+    }
+
+}
