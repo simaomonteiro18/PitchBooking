@@ -4,6 +4,7 @@ import com.simaomonteiro18.pitchbooking.entities.enums.PitchType;
 
 public class PitchSummaryDTO {
 
+    private Long id;
     private String name;
     private String city;
     private double pricePerHour;
@@ -12,11 +13,16 @@ public class PitchSummaryDTO {
     public PitchSummaryDTO() {
     }
 
-    public PitchSummaryDTO(String name, String city, double pricePerHour, PitchType type) {
+    public PitchSummaryDTO(Long id, String name, String city, double pricePerHour, PitchType type) {
+        this.id = id;
         this.name = name;
         this.city = city;
         this.pricePerHour = pricePerHour;
         this.type = type;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

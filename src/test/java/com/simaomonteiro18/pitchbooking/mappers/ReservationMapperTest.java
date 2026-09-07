@@ -34,6 +34,8 @@ public class ReservationMapperTest {
         i1.accept();
         i2.accept();
 
+        pitch.setId(1L);
+
         reservation.getInviteList().add(i1);
         reservation.getInviteList().add(i2);
 
@@ -41,6 +43,7 @@ public class ReservationMapperTest {
 
         assertEquals(reservation.getId(), reservationDTO.getId());
         assertEquals(reservation.getOrganizer().getName(), reservationDTO.getOrganizerName());
+        assertEquals(reservation.getPitch().getId(), reservationDTO.getPitch().getId());
         assertEquals(reservation.getPitch().getName(), reservationDTO.getPitch().getName());
         assertEquals(reservation.getPitch().getCity(), reservationDTO.getPitch().getCity());
         assertEquals(reservation.getPitch().getPricePerHour(), reservationDTO.getPitch().getPricePerHour());

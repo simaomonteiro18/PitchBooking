@@ -6,7 +6,7 @@ import com.simaomonteiro18.pitchbooking.entities.Pitch;
 public class PitchMapper {
         public static PitchSummaryDTO toDTO(Pitch pitch) {
 
-            PitchSummaryDTO pitchSummaryDTO = new PitchSummaryDTO(pitch.getName(), pitch.getCity(), pitch.getPricePerHour(), pitch.getPitchType());
+            PitchSummaryDTO pitchSummaryDTO = new PitchSummaryDTO(pitch.getId(), pitch.getName(), pitch.getCity(), pitch.getPricePerHour(), pitch.getPitchType());
 
             return pitchSummaryDTO;
 
