@@ -4,6 +4,7 @@ import com.simaomonteiro18.pitchbooking.entities.Pitch;
 import com.simaomonteiro18.pitchbooking.entities.Reservation;
 import com.simaomonteiro18.pitchbooking.entities.User;
 import com.simaomonteiro18.pitchbooking.entities.enums.PitchType;
+import com.simaomonteiro18.pitchbooking.exceptions.InvalidTimeException;
 import com.simaomonteiro18.pitchbooking.requests.CreateReservationRequest;
 import com.simaomonteiro18.pitchbooking.services.ReservationService;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,7 @@ public class ReservationControllerTest {
     private ReservationService reservationService;
 
     CreateReservationRequest request = new CreateReservationRequest(1L, 1L, LocalDateTime.parse("2026-09-28T16:00:00"), LocalDateTime.parse("2026-09-28T18:00:00"));
+    CreateReservationRequest request1 = new CreateReservationRequest(1L, 1L, LocalDateTime.parse("2026-09-28T18:00:00"), LocalDateTime.parse("2026-09-28T17:00:00"));
 
     User organizer = new User("Simão", "sm@gmail.com", "912345678", "Sintra");
     Pitch pitch = new Pitch("Sintrense", "Sintra", 20.0, PitchType.ELEVEN);
@@ -47,6 +49,19 @@ public class ReservationControllerTest {
         when(reservationService.createReservation(1L, 1L, request.startTime(), request.endTime())).thenReturn(reservation);
 
         mockMvc.perform(post("/reservations").contentType(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(request))).andExpect(status().isCreated());
+
+    }
+
+    @Test
+    @DisplayName("Teste a createReservation() sem sucesso")
+    public void testCreateReservationWithoutSuccess() throws Exception {
+
+        when(reservationService.createReservation(1L, 1L, request1.startTime(), request1.endTime())).thenThrow(InvalidTimeException.class);
+
+        mockMvc.perform(post("/reservations")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request1)))
+                        .andExpect(status().isBadRequest());
 
     }
 
